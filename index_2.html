@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>بوابة الطالب · مقرر التعلّم العميق التطبيقي</title>
+<meta name="description" content="روابط مقرر التعلّم العميق: محتوى المقرر، نتائج الاختبار النصفي، ومنصة المشاريع البحثية." />
+
+<!-- Fonts: Reem Kufi (display, geometric kufic) + Tajawal (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:        #0a0e1a;
+    --ink-2:      #0e1326;
+    --surface:    rgba(255,255,255,.035);
+    --surface-2:  rgba(255,255,255,.06);
+    --line:       rgba(255,255,255,.09);
+    --line-strong:rgba(255,255,255,.16);
+    --gold:       #f0c270;
+    --gold-bright:#ffd98a;
+    --gold-deep:  #c9954a;
+    --teal:       #6fe3d2;
+    --text:       #eef1fa;
+    --muted:      #99a2bd;
+    --muted-2:    #6c7592;
+    --r:          22px;
+    --maxw:       760px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:"Tajawal", system-ui, sans-serif;
+    background:var(--ink);
+    color:var(--text);
+    line-height:1.65;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ----- Atmospheric background ----- */
+  .bg{
+    position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(60vw 60vw at 88% -10%, rgba(240,194,112,.16), transparent 60%),
+      radial-gradient(55vw 55vw at 5% 110%, rgba(111,227,210,.10), transparent 60%),
+      linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 60%, var(--ink) 100%);
+  }
+  /* faint dot grid */
+  .bg::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size:32px 32px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 80%);
+            mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 80%);
+  }
+  /* grain */
+  .grain{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin-inline:auto;
+    padding:clamp(28px,6vw,72px) clamp(20px,5vw,28px) 56px;
+  }
+
+  /* ----- Hero ----- */
+  header{ margin-bottom:clamp(36px,7vw,64px); }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:9px;
+    font-size:.82rem; font-weight:500; letter-spacing:.02em;
+    color:var(--gold);
+    background:linear-gradient(90deg, rgba(240,194,112,.12), rgba(240,194,112,.02));
+    border:1px solid rgba(240,194,112,.22);
+    padding:7px 15px; border-radius:100px;
+    margin-bottom:24px;
+  }
+  .eyebrow .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--gold);
+    box-shadow:0 0 12px var(--gold);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.35} }
+
+  h1{
+    font-family:"Reem Kufi", serif;
+    font-weight:700;
+    font-size:clamp(2.1rem,7vw,3.6rem);
+    line-height:1.25;
+    letter-spacing:-.01em;
+    margin-bottom:18px;
+  }
+  h1 .accent{
+    background:linear-gradient(120deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+
+  .lead{
+    font-size:clamp(1rem,2.6vw,1.18rem);
+    color:var(--muted);
+    max-width:54ch;
+  }
+
+  .meta{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px;
+    margin-top:26px; padding-top:24px;
+    border-top:1px solid var(--line);
+    font-size:.92rem; color:var(--muted-2);
+  }
+  .meta .who{ display:flex; align-items:center; gap:10px; color:var(--text); font-weight:500; }
+  .avatar{
+    width:34px; height:34px; border-radius:50%;
+    display:grid; place-items:center;
+    background:linear-gradient(135deg, var(--gold), var(--gold-deep));
+    color:#1a1206; font-family:"Reem Kufi"; font-weight:700; font-size:.95rem;
+    box-shadow:0 4px 16px rgba(240,194,112,.28);
+  }
+  .meta .sep{ width:4px; height:4px; border-radius:50%; background:var(--muted-2); }
+
+  /* ----- Section label ----- */
+  .section-label{
+    display:flex; align-items:center; gap:14px;
+    font-size:.8rem; font-weight:500; letter-spacing:.12em;
+    color:var(--muted-2); text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .section-label .bar{ flex:1; height:1px; background:var(--line); }
+
+  /* ----- Link cards ----- */
+  .cards{ display:flex; flex-direction:column; gap:16px; }
+
+  .card{
+    position:relative;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:clamp(16px,3vw,26px);
+    padding:clamp(20px,4vw,28px);
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--r);
+    text-decoration:none;
+    color:inherit;
+    overflow:hidden;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),
+               border-color .35s, background .35s, box-shadow .35s;
+  }
+  /* start-side accent rail (right side in RTL) */
+  .card::before{
+    content:""; position:absolute; inset-block:0; inset-inline-start:0;
+    width:3px; background:linear-gradient(var(--gold), var(--gold-deep));
+    transform:scaleY(0); transform-origin:top;
+    transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  /* soft glow that sweeps from the start side */
+  .card::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(60% 120% at 100% 50%, rgba(240,194,112,.12), transparent 60%);
+    opacity:0; transition:opacity .4s;
+  }
+  .card:hover, .card:focus-visible{
+    transform:translateX(-8px);
+    border-color:var(--line-strong);
+    background:var(--surface-2);
+    box-shadow:0 18px 50px -20px rgba(0,0,0,.7);
+    outline:none;
+  }
+  .card:hover::before, .card:focus-visible::before{ transform:scaleY(1); }
+  .card:hover::after, .card:focus-visible::after{ opacity:1; }
+
+  .num{
+    font-family:"Reem Kufi";
+    font-size:clamp(1.5rem,5vw,2rem);
+    font-weight:600;
+    color:var(--muted-2);
+    line-height:1; min-width:1.6em; text-align:center;
+    transition:color .35s;
+  }
+  .card:hover .num{ color:var(--gold); }
+
+  .icon{
+    width:clamp(46px,11vw,54px); height:clamp(46px,11vw,54px);
+    border-radius:15px; flex:none;
+    display:grid; place-items:center;
+    background:linear-gradient(140deg, rgba(240,194,112,.14), rgba(240,194,112,.04));
+    border:1px solid rgba(240,194,112,.18);
+    color:var(--gold-bright);
+    transition:transform .35s, box-shadow .35s;
+  }
+  .card:hover .icon{ transform:scale(1.06) rotate(-3deg); box-shadow:0 8px 22px -8px rgba(240,194,112,.5); }
+  .icon svg{ width:55%; height:55%; }
+
+  .body{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .card h3{
+    font-family:"Reem Kufi"; font-weight:600;
+    font-size:clamp(1.12rem,3.4vw,1.3rem); line-height:1.4;
+  }
+  .card p{ font-size:.92rem; color:var(--muted); }
+  .url{
+    font-size:.78rem; color:var(--muted-2); direction:ltr; text-align:right;
+    font-family:"Tajawal"; margin-top:3px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    display:flex; gap:6px; align-items:center; justify-content:flex-end;
+  }
+  .url::before{ content:"↗"; color:var(--gold); }
+
+  .go{
+    flex:none; width:42px; height:42px; border-radius:50%;
+    display:grid; place-items:center;
+    border:1px solid var(--line); color:var(--muted);
+    transition:transform .35s, color .35s, border-color .35s, background .35s;
+  }
+  .go svg{ width:18px; height:18px; }
+  .card:hover .go{
+    transform:translateX(-6px);
+    color:var(--gold); border-color:rgba(240,194,112,.4);
+    background:rgba(240,194,112,.08);
+  }
+
+  /* ----- Footer ----- */
+  footer{
+    margin-top:clamp(44px,8vw,72px);
+    padding-top:26px; border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap; gap:8px 16px;
+    align-items:center; justify-content:space-between;
+    font-size:.85rem; color:var(--muted-2);
+  }
+  footer .brand{ font-family:"Reem Kufi"; color:var(--muted); }
+
+  /* ----- Entrance animation (flows right -> left, RTL) ----- */
+  .reveal{ opacity:0; transform:translateX(26px); animation:enter .7s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes enter{ to{ opacity:1; transform:translateX(0); } }
+  .d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}
+  .d4{animation-delay:.4s}.d5{animation-delay:.52s}.d6{animation-delay:.64s}.d7{animation-delay:.78s}
+
+  @media (prefers-reduced-motion:reduce){
+    .reveal{ animation:none; opacity:1; transform:none; }
+    .eyebrow .dot{ animation:none; }
+  }
+
+  @media (max-width:480px){
+    .card{ grid-template-columns:auto 1fr; }
+    .num{ grid-row:1; }
+    .go{ display:none; }
+    .card:hover{ transform:translateX(-4px); }
+  }
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <div class="wrap">
+    <header>
+      <span class="eyebrow reveal d1"><span class="dot"></span> بوابة الطالب</span>
+      <h1 class="reveal d2">مقرر <span class="accent">التعلّم العميق</span> التطبيقي</h1>
+      <p class="lead reveal d3">كل ما تحتاجه في مكان واحد — محتوى المقرر، نتائج الاختبارات، ومنصة مشاريعكم البحثية. اختر وجهتك من البطاقات أدناه.</p>
+
+      <div class="meta reveal d3">
+        <span class="who"><span class="avatar">أ</span> د. أحمد</span>
+        <span class="sep"></span>
+        <span>الفصل الدراسي الحالي</span>
+        <span class="sep"></span>
+        <span>ADL</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="section-label reveal d4"><span>الروابط</span><span class="bar"></span></div>
+
+      <nav class="cards">
+
+        <!-- 1 · Course Content -->
+        <a class="card reveal d5" href="https://phdahmad.github.io/ADL-Course/#home" target="_blank" rel="noopener noreferrer">
+          <span class="num">٠١</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </span>
+          <span class="body">
+            <h3>محتوى المقرر</h3>
+            <p>المحاضرات والمواد التعليمية والملفات المرجعية.</p>
+            <span class="url">phdahmad.github.io/ADL-Course</span>
+          </span>
+          <span class="go" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </span>
+        </a>
+
+        <!-- 2 · Midterm results -->
+        <a class="card reveal d6" href="https://phdahmad.github.io/ADL-midterm/" target="_blank" rel="noopener noreferrer">
+          <span class="num">٠٢</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </span>
+          <span class="body">
+            <h3>نتائج الاختبار النصفي</h3>
+            <p>اطّلع على درجاتك في الاختبار النصفي.</p>
+            <span class="url">phdahmad.github.io/ADL-midterm</span>
+          </span>
+          <span class="go" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </span>
+        </a>
+
+        <!-- 3 · Research portal -->
+        <a class="card reveal d7" href="https://research-portal-pi.vercel.app/" target="_blank" rel="noopener noreferrer">
+          <span class="num">٠٣</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/>
+              <path d="M6.7 7.6 10.4 16M17.3 7.6 13.6 16M7 6h10"/>
+            </svg>
+          </span>
+          <span class="body">
+            <h3>منصة المشاريع البحثية</h3>
+            <p>سجّل مشروعك البحثي وتابع تقدّمه عبر المنصة.</p>
+            <span class="url">research-portal-pi.vercel.app</span>
+          </span>
+          <span class="go" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </span>
+        </a>
+
+      </nav>
+    </main>
+
+    <footer>
+      <span class="brand">مقرر التعلّم العميق · د. أحمد</span>
+      <span>© <span id="year"></span></span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
