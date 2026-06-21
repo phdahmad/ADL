@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نتائج مقرر AI4203 — التعلّم العميق المتقدم</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
+    --card:#ffffff; --ink:#15303a; --muted:#5b7480;
+    --accent:#0e7c66; --accent2:#13a589; --gold:#c9a227;
+    --line:#e7eef0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Tajawal',sans-serif;color:var(--ink);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+  .wrap{width:100%;max-width:760px}
+  .card{background:var(--card);border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+  .head{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;padding:30px 28px;text-align:center;position:relative}
+  .head h1{font-size:23px;font-weight:800;margin-bottom:6px}
+  .head p{opacity:.92;font-size:15px;font-weight:500}
+  .badge{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);
+    padding:5px 16px;border-radius:30px;font-size:13px;font-weight:600}
+  .body{padding:30px 28px}
+  .login label{display:block;font-weight:700;margin-bottom:10px;font-size:16px}
+  .field{display:flex;gap:10px;flex-wrap:wrap}
+  input{flex:1;min-width:200px;padding:15px 18px;border:2px solid var(--line);border-radius:14px;
+    font-family:inherit;font-size:17px;text-align:center;letter-spacing:2px;transition:.2s;direction:ltr}
+  input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 4px rgba(19,165,137,.12)}
+  button{padding:15px 26px;border:none;border-radius:14px;background:var(--accent);color:#fff;
+    font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:.2s;white-space:nowrap}
+  button:hover{background:var(--accent2);transform:translateY(-1px)}
+  button:disabled{opacity:.6;cursor:wait}
+  .hint{color:var(--muted);font-size:13.5px;margin-top:12px;line-height:1.7}
+  .err{background:#fdecec;color:#c0392b;border:1px solid #f5c6c6;padding:13px 16px;border-radius:12px;
+    margin-top:16px;font-weight:600;font-size:14.5px;display:none}
+  /* result */
+  .result{display:none;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .who{text-align:center;margin-bottom:20px}
+  .who .name{font-size:24px;font-weight:800}
+  .who .meta{color:var(--muted);font-size:14px;margin-top:4px;direction:ltr}
+  .total-box{display:flex;align-items:center;justify-content:center;gap:26px;
+    background:linear-gradient(120deg,#0e7c66,#13a589);color:#fff;border-radius:18px;padding:22px;margin-bottom:20px;flex-wrap:wrap}
+  .total-box .num{font-size:46px;font-weight:800;line-height:1}
+  .total-box .lbl{font-size:13px;opacity:.9;margin-top:4px}
+  .gcircle{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.16);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid rgba(255,255,255,.5)}
+  .gcircle .g{font-size:34px;font-weight:800}
+  table{width:100%;border-collapse:collapse;margin-bottom:22px;font-size:15px}
+  th,td{padding:13px 12px;text-align:center;border-bottom:1px solid var(--line)}
+  th{background:#f3f8f7;color:var(--muted);font-weight:700;font-size:13.5px}
+  tr td:first-child{text-align:right;font-weight:600;color:var(--muted)}
+  .grandrow td{font-weight:800;background:#f7fbfa;font-size:16px;border-top:2px solid var(--accent2)}
+  .msg{background:linear-gradient(135deg,#fff9e9,#fef3d6);border:1px solid #f0e0a8;border-radius:16px;
+    padding:22px;text-align:center;line-height:2;font-size:16px;font-weight:500;color:#6b5d1e;position:relative}
+  .msg::before{content:"\2728";font-size:26px;display:block;margin-bottom:8px}
+  .sign{margin-top:14px;font-weight:700;color:var(--gold);font-size:14.5px}
+  .back{margin-top:22px;text-align:center}
+  .back button{background:#eef4f3;color:var(--accent)}
+  .back button:hover{background:#e0eeeb}
+  .foot{text-align:center;color:#8aa4ad;font-size:12.5px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="head">
+      <h1>نتائج المقرر — AI4203</h1>
+      <p>التعلّم العميق المتقدم · Advanced Deep Learning</p>
+      <span class="badge">الفصل الدراسي · النتائج النهائية</span>
+    </div>
+    <div class="body">
+      <!-- Login -->
+      <div class="login" id="login">
+        <label for="sid">أدخل رقمك الجامعي لعرض درجاتك</label>
+        <div class="field">
+          <input id="sid" type="text" inputmode="numeric" placeholder="مثال: 444000000" autocomplete="off">
+          <button id="go">عرض الدرجات</button>
+        </div>
+        <div class="hint">درجاتك خاصة بك ولا تظهر إلا برقمك الجامعي. بياناتك مشفّرة بالكامل ولا يمكن لأحد الاطلاع عليها بدون رقمك.</div>
+        <div class="err" id="err"></div>
+      </div>
+      <!-- Result -->
+      <div class="result" id="result">
+        <div class="who">
+          <div class="name" id="r-name"></div>
+          <div class="meta" id="r-meta"></div>
+        </div>
+        <div class="total-box">
+          <div style="text-align:center">
+            <div class="num" id="r-total"></div>
+            <div class="lbl">المجموع من 100</div>
+          </div>
+          <div class="gcircle"><div class="g" id="r-grade"></div><div class="lbl">التقدير</div></div>
+        </div>
+        <table>
+          <thead><tr><th style="text-align:right">عنصر التقييم</th><th>الدرجة</th><th>من</th></tr></thead>
+          <tbody>
+            <tr><td>الأسايمنت</td><td id="r-a"></td><td>20</td></tr>
+            <tr><td>الكويزات</td><td id="r-q"></td><td>10</td></tr>
+            <tr><td>الاختبار النصفي</td><td id="r-m"></td><td>30</td></tr>
+            <tr><td>الاختبار النهائي</td><td id="r-f"></td><td>40</td></tr>
+            <tr class="grandrow"><td>المجموع</td><td id="r-t2"></td><td>100</td></tr>
+          </tbody>
+        </table>
+        <div class="msg" id="r-msg"></div>
+        <div class="back"><button id="again">عرض رقم جامعي آخر</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">مقرر AI4203 — جميع الدرجات نهائية ومعتمدة · بالتوفيق للجميع</div>
+</div>
+
+<script src="data.js"></script>
+<script>
+const b642buf = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+async function deriveKey(secret, saltB64, iterations){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(secret), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:b642buf(saltB64), iterations, hash:'SHA-256'},
+    baseKey, {name:'AES-GCM', length:256}, false, ['decrypt']);
+}
+async function tryDecrypt(key, rec){
+  try{
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b642buf(rec.iv)}, key, b642buf(rec.ct));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }catch(e){ return null; }
+}
+const $ = id => document.getElementById(id);
+const fmt = v => (v===null||v===undefined||v==='') ? '—' : (Number.isInteger(v)? v : (Math.round(v*100)/100));
+
+async function lookup(){
+  const id = $('sid').value.trim();
+  const err = $('err'); err.style.display='none';
+  if(!/^[0-9]{6,}$/.test(id)){ err.textContent='الرجاء إدخال رقم جامعي صحيح (أرقام فقط).'; err.style.display='block'; return; }
+  const btn = $('go'); btn.disabled=true; btn.textContent='جارٍ البحث...';
+  try{
+    const key = await deriveKey(id, GRADE_DATA.studentSalt, GRADE_DATA.iterations);
+    let found=null;
+    for(const rec of GRADE_DATA.records){ const d = await tryDecrypt(key, rec); if(d){ found=d; break; } }
+    if(!found){ err.textContent='لم يتم العثور على هذا الرقم الجامعي. تأكّد من الرقم وحاول مرة أخرى.'; err.style.display='block'; return; }
+    show(found);
+  } finally { btn.disabled=false; btn.textContent='عرض الدرجات'; }
+}
+function show(d){
+  $('r-name').textContent = d.name;
+  $('r-meta').textContent = 'الرقم الجامعي: '+d.id+'  ·  الشعبة '+d.sec;
+  $('r-total').textContent = fmt(d.total);
+  $('r-grade').textContent = d.grade;
+  $('r-a').textContent = fmt(d.assign);
+  $('r-q').textContent = fmt(d.quiz);
+  $('r-m').textContent = fmt(d.mid);
+  $('r-f').textContent = fmt(d.final);
+  $('r-t2').textContent = fmt(d.total);
+  $('r-msg').innerHTML = d.msg + '<div class="sign">— مدرّس المقرر</div>';
+  $('login').style.display='none';
+  $('result').style.display='block';
+}
+$('go').addEventListener('click', lookup);
+$('sid').addEventListener('keydown', e=>{ if(e.key==='Enter') lookup(); });
+$('again').addEventListener('click', ()=>{ $('result').style.display='none'; $('login').style.display='block'; $('sid').value=''; $('sid').focus(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة المدرّس — AI4203</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--accent:#0e7c66;--accent2:#13a589;--ink:#15303a;--muted:#5b7480;--line:#e7eef0;--gold:#c9a227}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Tajawal',sans-serif;color:var(--ink);background:#eef3f4;min-height:100vh}
+  /* Lock screen */
+  .lock{min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);padding:22px}
+  .lockcard{background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.35);padding:34px 30px;max-width:420px;width:100%;text-align:center}
+  .lockcard .ico{font-size:42px;margin-bottom:10px}
+  .lockcard h1{font-size:21px;font-weight:800;margin-bottom:6px}
+  .lockcard p{color:var(--muted);font-size:14px;margin-bottom:22px}
+  input{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:13px;font-family:inherit;font-size:16px;text-align:center;transition:.2s}
+  input:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 4px rgba(19,165,137,.12)}
+  button{margin-top:14px;width:100%;padding:14px;border:none;border-radius:13px;background:var(--accent);color:#fff;font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:.2s}
+  button:hover{background:var(--accent2)}
+  button:disabled{opacity:.6;cursor:wait}
+  .err{background:#fdecec;color:#c0392b;border:1px solid #f5c6c6;padding:12px;border-radius:11px;margin-top:14px;font-weight:600;font-size:14px;display:none}
+  /* Dashboard */
+  .dash{display:none;max-width:1180px;margin:0 auto;padding:22px}
+  .top{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;border-radius:18px;padding:24px 26px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  .top h1{font-size:22px;font-weight:800}
+  .top p{opacity:.92;font-size:14px;margin-top:3px}
+  .stats{display:flex;gap:10px;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.16);border-radius:13px;padding:10px 16px;text-align:center;min-width:78px}
+  .stat .n{font-size:22px;font-weight:800}
+  .stat .l{font-size:11.5px;opacity:.9}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+  .toolbar input{max-width:280px;text-align:right}
+  .toolbar select{padding:11px 14px;border:2px solid var(--line);border-radius:11px;font-family:inherit;font-size:14px;background:#fff}
+  .toolbar .sp{flex:1}
+  .toolbar button{width:auto;margin:0;padding:11px 18px;font-size:14px;background:#fff;color:var(--accent);border:2px solid var(--accent)}
+  .toolbar button:hover{background:var(--accent);color:#fff}
+  .tablewrap{background:#fff;border-radius:16px;box-shadow:0 8px 26px rgba(0,0,0,.07);overflow:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;white-space:nowrap}
+  th,td{padding:12px 12px;text-align:center;border-bottom:1px solid var(--line)}
+  th{background:#f3f8f7;color:var(--muted);font-weight:700;font-size:13px;position:sticky;top:0;cursor:pointer;user-select:none}
+  th:hover{color:var(--accent)}
+  td.name{text-align:right;font-weight:600}
+  tbody tr:hover{background:#f7fbfa}
+  .g{display:inline-block;min-width:38px;padding:3px 9px;border-radius:20px;font-weight:800;font-size:13px}
+  .g.A\+,.g.A{background:#e2f5ee;color:#0e7c66}
+  .g.B\+,.g.B{background:#e7f0fb;color:#2b6cb0}
+  .g.C\+,.g.C{background:#fdf3e0;color:#b7791f}
+  .g.D\+,.g.D{background:#fde8e8;color:#c05621}
+  .g.F{background:#fbe0e0;color:#c0392b}
+  .foot{text-align:center;color:#8aa4ad;font-size:12.5px;margin:18px 0}
+  @media print{.toolbar,.top .stats,button{display:none}.tablewrap{box-shadow:none}body{background:#fff}}
+</style>
+</head>
+<body>
+  <!-- Lock -->
+  <div class="lock" id="lock">
+    <div class="lockcard">
+      <div class="ico">&#128274;</div>
+      <h1>لوحة المدرّس</h1>
+      <p>مقرر AI4203 — أدخل كلمة السر لعرض درجات جميع الطلاب</p>
+      <input id="pwd" type="password" placeholder="كلمة السر" autocomplete="off">
+      <button id="unlock">دخول</button>
+      <div class="err" id="err"></div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dash" id="dash">
+    <div class="top">
+      <div>
+        <h1>درجات الطلاب — AI4203</h1>
+        <p>التعلّم العميق المتقدم · Advanced Deep Learning</p>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="toolbar">
+      <input id="search" type="text" placeholder="بحث بالاسم أو الرقم الجامعي...">
+      <select id="secFilter"><option value="">كل الشعب</option><option value="1">شعبة 1</option><option value="2">شعبة 2</option></select>
+      <div class="sp"></div>
+      <button id="csv">تصدير CSV</button>
+      <button onclick="window.print()">طباعة</button>
+    </div>
+    <div class="tablewrap">
+      <table id="tbl">
+        <thead><tr>
+          <th data-k="idx">#</th>
+          <th data-k="id">الرقم الجامعي</th>
+          <th data-k="name" style="text-align:right">اسم الطالب</th>
+          <th data-k="sec">الشعبة</th>
+          <th data-k="assign">الأسايمنت (20)</th>
+          <th data-k="quiz">الكويزات (10)</th>
+          <th data-k="mid">النصفي (30)</th>
+          <th data-k="final">النهائي (40)</th>
+          <th data-k="total">المجموع (100)</th>
+          <th data-k="grade">التقدير</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="foot">جميع الدرجات نهائية ومعتمدة — مقرر AI4203</div>
+  </div>
+
+<script src="data.js"></script>
+<script>
+const b642buf = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+async function deriveKey(secret, saltB64, iterations){
+  const baseKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt:b642buf(saltB64), iterations, hash:'SHA-256'},
+    baseKey, {name:'AES-GCM', length:256}, false, ['decrypt']);
+}
+const $ = id => document.getElementById(id);
+const fmt = v => (v===null||v===undefined||v==='') ? '—' : (Number.isInteger(v)? v : (Math.round(v*100)/100));
+let ROWS=[], view=[], sortK='total', sortDir=-1;
+
+async function unlock(){
+  const pwd = $('pwd').value; const err=$('err'); err.style.display='none';
+  if(!pwd){ err.textContent='أدخل كلمة السر.'; err.style.display='block'; return; }
+  const btn=$('unlock'); btn.disabled=true; btn.textContent='جارٍ التحقق...';
+  try{
+    const key = await deriveKey(pwd, GRADE_DATA.teacherSalt, GRADE_DATA.iterations);
+    let data;
+    try{
+      const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b642buf(GRADE_DATA.teacher.iv)}, key, b642buf(GRADE_DATA.teacher.ct));
+      data = JSON.parse(new TextDecoder().decode(pt));
+    }catch(e){ err.textContent='كلمة السر غير صحيحة.'; err.style.display='block'; return; }
+    ROWS = data;
+    $('lock').style.display='none'; $('dash').style.display='block';
+    buildStats(); render();
+  } finally { btn.disabled=false; btn.textContent='دخول'; }
+}
+function buildStats(){
+  const dist={}; ROWS.forEach(r=>dist[r.grade]=(dist[r.grade]||0)+1);
+  const avg = (ROWS.reduce((s,r)=>s+r.total,0)/ROWS.length).toFixed(1);
+  const order=['A+','A','B+','B','C+','C','D+','D','F'];
+  let html = `<div class="stat"><div class="n">${ROWS.length}</div><div class="l">طالب</div></div>`+
+             `<div class="stat"><div class="n">${avg}</div><div class="l">المتوسط</div></div>`;
+  order.filter(g=>dist[g]).forEach(g=>{ html+=`<div class="stat"><div class="n">${dist[g]}</div><div class="l">${g}</div></div>`; });
+  $('stats').innerHTML=html;
+}
+function render(){
+  const q=$('search').value.trim(); const sec=$('secFilter').value;
+  view = ROWS.filter(r=> (!sec||r.sec===sec) && (!q || r.name.includes(q) || r.id.includes(q)));
+  view.sort((a,b)=>{ let x=a[sortK],y=b[sortK];
+    if(typeof x==='string'){x=x;y=y; return sortDir*x.localeCompare(y,'ar');}
+    return sortDir*((x||0)-(y||0)); });
+  const tb=$('tbody'); tb.innerHTML='';
+  view.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td style="direction:ltr">${r.id}</td><td class="name">${r.name}</td>`+
+      `<td>${r.sec}</td><td>${fmt(r.assign)}</td><td>${fmt(r.quiz)}</td><td>${fmt(r.mid)}</td>`+
+      `<td>${fmt(r.final)}</td><td><b>${fmt(r.total)}</b></td>`+
+      `<td><span class="g ${r.grade}">${r.grade}</span></td>`;
+    tb.appendChild(tr);
+  });
+}
+document.querySelectorAll('th[data-k]').forEach(th=>{
+  th.addEventListener('click',()=>{ const k=th.dataset.k; if(k==='idx')return;
+    if(sortK===k) sortDir*=-1; else { sortK=k; sortDir = (k==='name'||k==='id')?1:-1; } render(); });
+});
+function toCSV(){
+  const head=['الرقم الجامعي','اسم الطالب','الشعبة','الأسايمنت (20)','الكويزات (10)','النصفي (30)','النهائي (40)','المجموع (100)','التقدير'];
+  const lines=[head.join(',')];
+  view.forEach(r=>lines.push([r.id,'"'+r.name+'"',r.sec,r.assign,r.quiz,r.mid,r.final,r.total,r.grade].join(',')));
+  const blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='AI4203_grades.csv'; a.click();
+}
+$('unlock').addEventListener('click', unlock);
+$('pwd').addEventListener('keydown', e=>{ if(e.key==='Enter') unlock(); });
+$('search').addEventListener('input', render);
+$('secFilter').addEventListener('change', render);
+$('csv').addEventListener('click', toCSV);
+</script>
+</body>
+</html>
